@@ -5,7 +5,7 @@ export default function Home() {
         <>
             <div className="min-h-screen">
                 {/* HEADER */}
-                <div className='flex flex-row justify-between items-center h-16 border-b border-slate-700'>
+                <div className='flex flex-row justify-between items-center h-20 border-b border-slate-700'>
                     {/* ICON + NAME */}
                     <div className='container mx-auto'>
                         <div className='flex flex-row items-center gap-2'>
@@ -17,7 +17,7 @@ export default function Home() {
                 </div>
 
                 {/* BODY */}
-                <div className='container mx-auto pt-4 flex flex-col h-full'>
+                <div className='container mx-auto pt-4 flex flex-col h-full px-3 md:px-0'>
                     <div className="carousel w-full max-w-3xl rounded-lg self-center">
                         <div id="slide1" className="carousel-item relative w-full">
                             <img src="https://daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.jpg" className="w-full" />
@@ -51,8 +51,8 @@ export default function Home() {
                 </div>
 
                 {/* LIST */}
-                <div className='container mx-auto pt-4'>
-                    <div className="grid grid-cols-5 gap-4">
+                <div className='container mx-auto pt-4 px-3 md:px-0'>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
                         {Array.from({ length: 10 }).map((_, i) => {
                             return (
                                 <div className="card card-compact bg-base-100 shadow-xl border border-slate-700" key={i}>
