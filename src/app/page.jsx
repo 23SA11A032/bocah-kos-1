@@ -38,12 +38,13 @@ export default function Home() {
                     </div>
                 </div>
 
-                {/* LIST */}
+                {/* KOS PUTRA */}
                 <div className='container mx-auto pt-4 px-3 md:px-0'>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
+                    <p className='text-xl font-bold'>KOS PUTRA</p>
+                    <div className='flex flex-row overflow-x-auto gap-3 pt-4'>
                         {Array.from({ length: 10 }).map((_, i) => {
                             return (
-                                <motion.div className="card card-compact bg-base-100 shadow-xl border border-slate-700" key={i}>
+                                <motion.div className="card card-compact bg-base-100 shadow-xl border border-slate-700 max-w-[12rem] w-full" key={i}>
                                     <figure><img src="https://www.sewakost.com/files/01-2020/ad28904/kos-kosan-443380741_large.jpg" alt="Shoes" /></figure>
                                     <div className="card-body">
                                         <div className="flex flex-row items-center gap-2">
@@ -60,14 +61,21 @@ export default function Home() {
                                 </motion.div>
                             )
                         })}
+                    </div>
+                </div>
 
+
+                {/* KOS PUTRI */}
+                <div className='container mx-auto pt-4 px-3 md:px-0'>
+                    <p className='text-xl font-bold'>KOS PUTRI</p>
+                    <div className='flex flex-row overflow-x-auto gap-3 pt-4'>
                         {Array.from({ length: 10 }).map((_, i) => {
                             return (
-                                <div className="card card-compact bg-base-100 shadow-xl border border-slate-700" key={i}>
+                                <motion.div className="card card-compact bg-base-100 shadow-xl border border-slate-700 max-w-[12rem] w-full" key={i}>
                                     <figure><img src="https://www.sewakost.com/files/01-2020/ad28904/kos-kosan-443380741_large.jpg" alt="Shoes" /></figure>
                                     <div className="card-body">
                                         <div className="flex flex-row items-center gap-2">
-                                            <div className="badge badge-secondary">PUTRI</div>
+                                            <div className="badge badge-primary">PUTRA</div>
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
                                                 <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clipRule="evenodd" />
                                             </svg>
@@ -77,7 +85,7 @@ export default function Home() {
                                         <p className='text-sm italic'>k. mandi dalam, wifi, kasur.</p>
                                         <p>Rp. 900.000</p>
                                     </div>
-                                </div>
+                                </motion.div>
                             )
                         })}
                     </div>
