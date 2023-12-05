@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { motion } from "framer-motion";
+import Login from '@/components/Login';
 
 export default function Home() {
     var images = [
@@ -20,13 +21,15 @@ export default function Home() {
         <>
             <div className="min-h-screen">
                 {/* HEADER */}
-                <div className='flex flex-row justify-between items-center h-20 border-b border-slate-700'>
+                <div className='flex flex-row items-center h-20 border-b border-slate-700'>
                     {/* ICON + NAME */}
-                    <div className='container mx-auto px-3 md:px-0'>
+                    <div className='flex flex-row justify-between container mx-auto px-3 md:px-0'>
                         <div className='flex flex-row items-center gap-2'>
                             <Image alt='' src={"https://cdn0.iconfinder.com/data/icons/avatar-15/512/ninja-512.png"} height={50} width={50} />
                             <p className='font-bold text-2xl'>BOCAH<span className='text-red-800'>KOS</span></p>
                         </div>
+
+                        <Login />
                     </div>
 
                 </div>
@@ -44,7 +47,7 @@ export default function Home() {
                     <div className='flex flex-row overflow-x-auto gap-3 pt-4'>
                         {Array.from({ length: 10 }).map((_, i) => {
                             return (
-                                <motion.div className="card card-compact bg-base-100 shadow-xl border border-slate-700 max-w-[12rem] w-full" key={i}>
+                                <motion.div animate={{ x: ['100%', '0%'] }} transition={{ duration: 0.5 * (i + 1), type: "tween" }} className="card card-compact bg-base-100 shadow-xl border border-slate-700 max-w-[12rem] w-full" key={i}>
                                     <figure><img src="https://www.sewakost.com/files/01-2020/ad28904/kos-kosan-443380741_large.jpg" alt="Shoes" /></figure>
                                     <div className="card-body">
                                         <div className="flex flex-row items-center gap-2">
@@ -71,7 +74,7 @@ export default function Home() {
                     <div className='flex flex-row overflow-x-auto gap-3 pt-4'>
                         {Array.from({ length: 10 }).map((_, i) => {
                             return (
-                                <motion.div className="card card-compact bg-base-100 shadow-xl border border-slate-700 max-w-[12rem] w-full" key={i}>
+                                <motion.div animate={{ x: ['100%', '0%'] }} transition={{ duration: 0.5 * (i + 1), type: "tween" }} className="card card-compact bg-base-100 shadow-xl border border-slate-700 max-w-[12rem] w-full" key={i}>
                                     <figure><img src="https://www.sewakost.com/files/01-2020/ad28904/kos-kosan-443380741_large.jpg" alt="Shoes" /></figure>
                                     <div className="card-body">
                                         <div className="flex flex-row items-center gap-2">
