@@ -1,7 +1,12 @@
 import { useState } from "react"
 
 export default function Login() {
-    var [mode, setMode] = useState('')
+    const [mode, setMode] = useState("")
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [nohp, setNohp] = useState("");
+    const [role, setRole] = useState("");
 
     return (
         <>
@@ -11,24 +16,50 @@ export default function Login() {
                 <div className="modal-box p-8">
                     {
                         mode == 'pencari' ? (
-                            <>
-                                <div className="flex flex-col items-center gap-4">
-
+                            <form>
+                                <p className="font-bold text-lg text-center">Login sebagai Pencari</p>
+                                <div className="flex flex-col gap-3 mt-4">
+                                    <div className="form-control">
+                                        <label htmlFor="name">Nama</label>                            
+                                        <input id="name" type="text" placeholder="nama" className="input input-primary" />
+                                    </div>
+                                    <div className="form-control">
+                                        <label htmlFor="email">Email</label>                            
+                                        <input id="email" type="email" placeholder="email" className="input input-primary" />
+                                    </div>
+                                    <div className="form-control">
+                                        <label htmlFor="password">Password</label>                            
+                                        <input id="password" type="password" placeholder="password" className="input input-primary" />
+                                    </div>
                                 </div>
-                            </>
+                            </form>
                         ) : mode == 'pemilik' ? (
-                            <>
-                                <div className="flex flex-col items-center gap-4"></div>
-                            </>
+                                <form>
+                                    <p className="font-bold text-lg text-center">Login sebagai Pemilik</p>
+                                    <div className="flex flex-col gap-3 mt-4">
+                                        <div className="form-control">
+                                            <label htmlFor="name">Nama</label>
+                                            <input id="name" type="text" placeholder="nama" className="input input-primary" />
+                                        </div>
+                                        <div className="form-control">
+                                            <label htmlFor="email">Email</label>
+                                            <input id="email" type="email" placeholder="email" className="input input-primary" />
+                                        </div>
+                                        <div className="form-control">
+                                            <label htmlFor="password">Password</label>
+                                            <input id="password" type="password" placeholder="password" className="input input-primary" />
+                                        </div>
+                                    </div>
+                                </form>
                         ) : (
                             <>
                                 <div className="flex flex-col items-center gap-4">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-48 h-48">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-44 h-44">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
                                     </svg>
                                     <p className="font-bold text-lg">Masuk sebagai?</p>
                                 </div>
-                                <div className="flex flex-col gap-3 mt-4">
+                                <div className="flex flex-col gap-5 mt-4">
                                     <button className="btn btn-primary" onClick={() => setMode("pencari")}>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                                             <path fillRule="evenodd" d="M10.5 3.75a6.75 6.75 0 100 13.5 6.75 6.75 0 000-13.5zM2.25 10.5a8.25 8.25 0 1114.59 5.28l4.69 4.69a.75.75 0 11-1.06 1.06l-4.69-4.69A8.25 8.25 0 012.25 10.5z" clipRule="evenodd" />
