@@ -41,10 +41,10 @@ export default function Login() {
 
     return (
         <>
-            <button className="btn normal-case mr-3 md:mr-0 btn-primary" onClick={() => document.getElementById('my_modal_1').showModal()}>Masuk</button>
+            <button className="btn normal-case mr-3 lg:mr-0 btn-primary" onClick={() => document.getElementById('my_modal_1').showModal()}>Masuk</button>
 
             <dialog id="my_modal_1" className="modal">
-                <div className="modal-box p-8 overflow-hidden">
+                <div className="modal-box p-12 px-16 overflow-hidden">
                     {
                         mode == 'pencari' ? (
                             <motion.form key={1} animate={{ opacity: [0, 1] }} exit={{ opacity: [1, 0] }} transition={{ duration: 0.7 }} className="my-5" onSubmit={(e) => login(e)}>
