@@ -8,30 +8,33 @@ import Image from "next/image";
 import Login from "@/components/Login";
 import Logout from "@/components/Logout";
 import { FaExchangeAlt } from 'react-icons/fa';
-import { MdOutlineDomainVerification } from "react-icons/md";
+import { MdFileUpload, MdOutlineDomainVerification } from "react-icons/md";
 import axios from "axios";
 
 export default function Pemilik() {
-    const [tab, setTab] = useState("0")
-    const [user, setUser] = useState(null)
-    const [provinsi, setProvinsi] = useState({});
-    const [kabupaten, setKabupaten] = useState({});
-    const [kecamatan, setKecamatan] = useState({});
-    const [listProvinsi, setListProvinsi] = useState([]);
-    const [listKabupaten, setlistKabupaten] = useState([]);
-    const [listKecamatan, setListKecamatan] = useState([]);
+    const [tab, setTab] = useState("4")
+    const [user, setUser] = useState({})
+    const [settings, setSettings] = useState({});
+    
 
     useEffect(() => {
-        setUser(localStorage.getItem("user"));
-        fetch("https://region-indonesia.vercel.app/api/provinsi")
-            .then(html => html.json())
-            .then(json => setListProvinsi(json))
+        setUser(JSON.parse(localStorage.getItem("user")));
+        fetch("/api/kos/" + JSON.parse(localStorage.getItem("user")).id, { cache: "no-cache" })
+            .then((html) => html.json())
+            .then(json => setSettings(json));
     }, [])
 
-    function getKabupaten(id) {
-        fetch("https://region-indonesia.vercel.app/api/kota/?provinsi_id=" + id)
-            .then(html => html.json())
-            .then(json => setlistKabupaten(json))
+    async function handleUpdate() {
+        try {
+            var { data } = await axios.post("/api/kos/" + user.id, settings)
+            console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    function change(key, value) {
+        setSettings()
     }
 
     return (
@@ -70,51 +73,46 @@ export default function Pemilik() {
                                     </div>
 
                                 </div>
-                            </>) : tab == "1" ? (<>
+                            </>) : tab == "4" ? (<>
                                 <div className="flex flex-col gap-3">
-                                    <div className="form-control">
-                                        <label htmlFor="nama">Nama Kost</label>
-                                        <input id="nama" type="text" placeholder="nama kost" className="input input-primary max-w-lg" />
+                                    <div className="form-control gap-2">
+                                        <label htmlFor="nama">Nama Kost :</label>
+                                        <input id="nama" type="text" placeholder="nama kost" defaultValue={settings.nama} className="input input-primary max-w-lg" />
                                     </div>
-                                    <div className="form-control">
-                                        <label htmlFor="type">Disewakan untuk putra/putri/campur</label>
-                                        <select id="type" className="select select-primary max-w-lg">
-                                            <option disabled selected>Pilih</option>
-                                            <option>putra</option>
-                                            <option>putri</option>
-                                            <option>campur</option>
+                                    <div className="form-control gap-2">
+                                        <label htmlFor="type">Disewakan untuk putra/putri/campur :</label>
+                                        <select id="type" className="select select-primary max-w-lg" defaultValue={settings.sewaFor}>
+                                            <option disabled value={''}>Pilih</option>
+                                            <option value={'putra'}>putra</option>
+                                            <option value={'putri'}>putri</option>
+                                            <option value={'campur'}>campur</option>
                                         </select>
                                     </div>
-                                    <div className="form-control">
-                                        <label htmlFor="desc">Deskripsi</label>
-                                        <textarea id="desc" className="textarea textarea-primary max-w-lg" placeholder="Deskripsi..."></textarea>
+                                    <div className="form-control gap-2">
+                                        <label htmlFor="desc">Deskripsi :</label>
+                                        <textarea id="desc" defaultValue={settings.deskripsi} className="textarea textarea-primary max-w-lg" placeholder="Deskripsi..."></textarea>
                                     </div>
-                                    <div className="form-control">
-                                        <label htmlFor="peraturan">Peraturan</label>
-                                        <textarea id="peraturan" className="textarea textarea-primary max-w-lg" placeholder="Deskripsi..."></textarea>
+                                    <div className="form-control gap-2">
+                                        <label htmlFor="peraturan">Peraturan :</label>
+                                        <textarea id="peraturan" defaultValue={settings.peraturan} className="textarea textarea-primary max-w-lg" placeholder="Peraturan..."></textarea>
                                     </div>
-                                    <div className="form-control">
-                                        <label htmlFor="alamat">Alamat</label>
-                                        <div className="flex flex-row items-center gap-3 max-w-lg">
-                                            <select id="type" value={""} className="select select-primary flex-1" onChange={e => {
-                                                setProvinsi(e.target.value)
-                                                getKabupaten(JSON.parse(e.target.value).id)
-                                            }}>
-                                                <option disabled selected value={""}>Provinsi</option>
-                                                {listProvinsi.map((v, i) => <option key={i} value={JSON.stringify(v)}>{v.nama}</option>)}
-                                            </select>
-                                            <select id="type" value={""} className="select select-primary flex-1" onChange={e => setKabupaten(e.target.value)}>
-                                                <option disabled selected value={""}>Kabupaten</option>
-                                                {listKabupaten.map((v, i) => <option key={i} value={JSON.stringify(v)}>{v.nama}</option>)}
-                                            </select>
-                                            <select id="type" defaultValue={""} className="select select-primary flex-1">
-                                                <option disabled selected value={""}>Kecamatan</option>
-                                                <option>putra</option>
-                                                <option>putri</option>
-                                                <option>campur</option>
-                                            </select>
-                                        </div>
+                                    <div className="form-control gap-2">
+                                        <label htmlFor="alamat">Alamat :</label>
+                                        <textarea id="alamat" defaultValue={settings.alamat} className="textarea textarea-primary max-w-lg" placeholder="Alamat..."></textarea>
                                     </div>
+                                    <div className="form-control gap-2">
+                                        <label htmlFor="gmap">Link Google Maps :</label>
+                                        <input id="gmap" defaultValue={settings.linkGoogleMaps} type="text" placeholder="nama kost" className="input input-primary max-w-lg" />
+                                    </div>
+                                    <div className="form-control gap-2">
+                                        <label htmlFor="file">Image :</label>
+                                        <input id={`file`} type="file" name="files[]" accept="image/*" multiple className="file-input file-input-bordered w-full max-w-lg" onChange={async e => console.log(await toBase64(e.target.files[0]))} />                                    
+                                    </div>
+
+                                    <button className="btn btn-primary w-fit mt-2" onClick={handleUpdate}>
+                                        <MdFileUpload size={18} />
+                                        Update
+                                    </button>
                                 </div>
                             </>) : (<></>)}
                         </div>
@@ -123,10 +121,10 @@ export default function Pemilik() {
                         <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay"></label>
                         <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content gap-2">
                             {/* Sidebar content here */}
-                            <li onClick={() => setTab("0")}><a className={`${tab == "0" && "bg-primary text-white hover:bg-primary"}`}><HiHomeModern size={26} />Dashboard</a></li>
-                            <li onClick={() => setTab("1")}><a className={`${tab == "1" && "bg-primary text-white hover:bg-primary"}`}><HiInboxArrowDown size={26} />Tambah Kost</a></li>
+                            {/* <li onClick={() => setTab("0")}><a className={`${tab == "0" && "bg-primary text-white hover:bg-primary"}`}><HiHomeModern size={26} />Dashboard</a></li> */}
+                            {/* <li onClick={() => setTab("1")}><a className={`${tab == "1" && "bg-primary text-white hover:bg-primary"}`}><HiInboxArrowDown size={26} />Tambah Kost</a></li> */}
                             <li onClick={() => setTab("2")}><a className={`${tab == "2" && "bg-primary text-white hover:bg-primary"}`}><FaExchangeAlt size={26} />Permintaan</a></li>
-                            <li onClick={() => setTab("3")}><a className={`${tab == "3" && "bg-primary text-white hover:bg-primary"}`}><MdOutlineDomainVerification size={26} />Konfirmasi</a></li>
+                            {/* <li onClick={() => setTab("3")}><a className={`${tab == "3" && "bg-primary text-white hover:bg-primary"}`}><MdOutlineDomainVerification size={26} />Konfirmasi</a></li> */}
                             <li onClick={() => setTab("4")}><a className={`${tab == "4" && "bg-primary text-white hover:bg-primary"}`}><IoMdSettings size={26} />Settings</a></li>
                         </ul>
 
@@ -141,3 +139,12 @@ export default function Pemilik() {
 function Home() {
 
 }
+
+function toBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  }
