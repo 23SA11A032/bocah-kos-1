@@ -11,10 +11,10 @@ export async function GET(request, { params: { id } }) {
 export async function POST(request, { params }) {
     try {
         var body = await request.json();
+        var {id, nama, sewaFor, deskripsi, peraturan, alamat, linkGoogleMaps, images} = body
         
-        return Response.json(body);
-        var [query] = await connection.promise().query("UPDATE Kos SET id = ?, nama = ?, sewaFor = ?, deskripsi = ?, peraturan = ?, alamat = ?, linkGoogleMaps = ? WHERE id = ?",
-            [...Object.entries(body).map(v => v[1]), body.id])
+        var [query] = await connection.promise().query("UPDATE Kos SET id = ?, nama = ?, sewaFor = ?, deskripsi = ?, peraturan = ?, alamat = ?, linkGoogleMaps = ?, images = ? WHERE id = ?",
+            [id, nama, sewaFor, deskripsi, peraturan, alamat, linkGoogleMaps, images, id])
         console.log(query)
         return Response.json(body);
     } catch (error) {

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import Header from "@/components/Header";
 import { useEffect, useState } from "react";
@@ -12,30 +12,62 @@ import { MdFileUpload, MdOutlineDomainVerification } from "react-icons/md";
 import axios from "axios";
 
 export default function Pemilik() {
-    const [tab, setTab] = useState("4")
-    const [user, setUser] = useState({})
+    const [tab, setTab] = useState("4");
+    const [user, setUser] = useState({});
     const [settings, setSettings] = useState({});
-    
+    const [ListFiles, setListFiles] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
+    const [nama, setNama] = useState("");
+    const [sewaFor, setSewaFor] = useState("");
+    const [deskripsi, setDeskripsi] = useState("");
+    const [peraturan, Peraturan] = useState("");
+    const [alamat, setAlamat] = useState("");
+    const [linkGoogleMaps, LinkGoogleMaps] = useState("");
 
     useEffect(() => {
         setUser(JSON.parse(localStorage.getItem("user")));
         fetch("/api/kos/" + JSON.parse(localStorage.getItem("user")).id, { cache: "no-cache" })
             .then((html) => html.json())
             .then(json => setSettings(json));
-    }, [])
+    }, []);
 
     async function handleUpdate() {
+        setError("");
+        setSuccess("");
+        setIsLoading(true);
         try {
-            var { data } = await axios.post("/api/kos/" + user.id, settings)
-            console.log(data);
+            var images = await onImagesUpload(ListFiles);
+            settings.images = images.join("|");
+            await axios.post("/api/kos/" + user.id, settings);
+            setSuccess("Data berhasil di update.");
         } catch (error) {
             console.log(error);
+            setError("Error pada saat memperbarui data.");
+        } finally {
+            setIsLoading(false);
         }
     }
 
     function change(key, value) {
-        setSettings()
+        setSettings(v => {
+            v[key] = value
+            return v
+        });
     }
+
+    async function onImagesUpload(images) {
+        var results = [];
+        for (let v of images) {
+            const formData = new FormData();
+            formData.append('key', 'bd3113d71ae0bb1bc328b3a5a0d021fc');
+            formData.append('image', v);
+            const { data } = await axios.post('https://api.imgbb.com/1/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+            results.push(data.data.url);
+        }
+        return results;
+    };
 
     return (
         <>
@@ -74,14 +106,14 @@ export default function Pemilik() {
 
                                 </div>
                             </>) : tab == "4" ? (<>
-                                <div className="flex flex-col gap-3">
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                                     <div className="form-control gap-2">
                                         <label htmlFor="nama">Nama Kost :</label>
-                                        <input id="nama" type="text" placeholder="nama kost" defaultValue={settings.nama} className="input input-primary max-w-lg" />
+                                        <input id="nama" type="text" placeholder="nama kost" defaultValue={settings.nama} className="input input-primary max-w-lg" onChange={e => change("nama", e.target.value)} />
                                     </div>
                                     <div className="form-control gap-2">
                                         <label htmlFor="type">Disewakan untuk putra/putri/campur :</label>
-                                        <select id="type" className="select select-primary max-w-lg" defaultValue={settings.sewaFor}>
+                                        <select id="type" className="select select-primary max-w-lg" defaultValue={settings.sewaFor} onChange={e => change("sewaFor", e.target.value)}>
                                             <option disabled value={''}>Pilih</option>
                                             <option value={'putra'}>putra</option>
                                             <option value={'putri'}>putri</option>
@@ -90,30 +122,47 @@ export default function Pemilik() {
                                     </div>
                                     <div className="form-control gap-2">
                                         <label htmlFor="desc">Deskripsi :</label>
-                                        <textarea id="desc" defaultValue={settings.deskripsi} className="textarea textarea-primary max-w-lg" placeholder="Deskripsi..."></textarea>
+                                        <textarea id="desc" defaultValue={settings.deskripsi} className="textarea textarea-primary max-w-lg" placeholder="Deskripsi..." onChange={e => change("deskripsi", e.target.value)}></textarea>
                                     </div>
                                     <div className="form-control gap-2">
                                         <label htmlFor="peraturan">Peraturan :</label>
-                                        <textarea id="peraturan" defaultValue={settings.peraturan} className="textarea textarea-primary max-w-lg" placeholder="Peraturan..."></textarea>
+                                        <textarea id="peraturan" defaultValue={settings.peraturan} className="textarea textarea-primary max-w-lg" placeholder="Peraturan..." onChange={e => change("peraturan", e.target.value)}></textarea>
                                     </div>
                                     <div className="form-control gap-2">
                                         <label htmlFor="alamat">Alamat :</label>
-                                        <textarea id="alamat" defaultValue={settings.alamat} className="textarea textarea-primary max-w-lg" placeholder="Alamat..."></textarea>
+                                        <textarea id="alamat" defaultValue={settings.alamat} className="textarea textarea-primary max-w-lg" placeholder="Alamat..." onChange={e => change("alamat", e.target.value)}></textarea>
                                     </div>
                                     <div className="form-control gap-2">
                                         <label htmlFor="gmap">Link Google Maps :</label>
-                                        <input id="gmap" defaultValue={settings.linkGoogleMaps} type="text" placeholder="nama kost" className="input input-primary max-w-lg" />
+                                        <input id="gmap" defaultValue={settings.linkGoogleMaps} type="text" placeholder="link..." className="input input-primary max-w-lg" onChange={e => change("linkGoogleMaps", e.target.value)} />
                                     </div>
                                     <div className="form-control gap-2">
                                         <label htmlFor="file">Image :</label>
-                                        <input id={`file`} type="file" name="files[]" accept="image/*" multiple className="file-input file-input-bordered w-full max-w-lg" onChange={async e => console.log(await toBase64(e.target.files[0]))} />                                    
+                                        <input id={`file`} type="file" name="files[]" accept="image/*" multiple className="file-input file-input-bordered w-full max-w-lg" onChange={e => setListFiles(e.target.files)} required />
                                     </div>
-
-                                    <button className="btn btn-primary w-fit mt-2" onClick={handleUpdate}>
-                                        <MdFileUpload size={18} />
-                                        Update
-                                    </button>
                                 </div>
+                                {/* ALERT */}
+                                <div role="alert" className={`alert alert-error flex flex-row items-center mt-4 max-w-lg ${!error && 'hidden'}`}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    <span>{error}</span>
+                                </div>
+                                <div role="alert" className={`alert alert-success flex flex-row items-center mt-4 max-w-lg ${!success && 'hidden'}`}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    <span>{success}</span>
+                                </div>
+                                {
+                                    isLoading ? (<>
+                                        <button className="btn btn-primary w-fit mt-2">
+                                            <span className="loading loading-spinner"></span>
+                                            loading
+                                        </button>
+                                    </>) : (<>
+                                        <button className="btn btn-primary w-fit mt-2" onClick={handleUpdate}>
+                                            <MdFileUpload size={18} />
+                                            Update
+                                        </button>
+                                    </>)
+                                }
                             </>) : (<></>)}
                         </div>
                     </div>
@@ -133,7 +182,7 @@ export default function Pemilik() {
 
             </div>
         </>
-    )
+    );
 }
 
 function Home() {
@@ -142,9 +191,9 @@ function Home() {
 
 function toBase64(file) {
     return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = error => reject(error);
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
     });
-  }
+}

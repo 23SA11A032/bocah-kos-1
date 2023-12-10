@@ -10,9 +10,10 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Navigation from '@/components/Navigation';
+import Pemilik from '@/components/Pemilik';
 
 export default function Home() {
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState({})
 
     var images = [
         "https://static.mamikos.com/uploads/cache/data/event/2023-10-26/yz5WBfq1-540x720.jpg",
@@ -25,8 +26,10 @@ export default function Home() {
     ]
 
     useEffect(() => {
-        setUser(localStorage.getItem("user"))
+        setUser(JSON.parse(localStorage.getItem("user")))
     }, [])
+
+    if (user?.role == "kos") return <Pemilik />
 
     return (
         <>

@@ -15,9 +15,9 @@ export async function POST(request) {
             user.password = jwt.sign(password, "ozan6825")
             return Response.json({ status: true, token: token, user })
         } else {
-            return Response.json({ status: false }, { status: 401 });
+            return Response.json({ status: false, message: "Username or Password wrong!" }, { status: 401 });
         }
     } catch (error) {
-
+        return Response.json({ status: false, message: "Server error." }, { status: 500 });
     }
 }
