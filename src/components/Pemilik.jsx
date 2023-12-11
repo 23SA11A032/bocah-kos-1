@@ -19,12 +19,6 @@ export default function Pemilik() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
-    const [nama, setNama] = useState("");
-    const [sewaFor, setSewaFor] = useState("");
-    const [deskripsi, setDeskripsi] = useState("");
-    const [peraturan, Peraturan] = useState("");
-    const [alamat, setAlamat] = useState("");
-    const [linkGoogleMaps, LinkGoogleMaps] = useState("");
 
     useEffect(() => {
         setUser(JSON.parse(localStorage.getItem("user")));
@@ -52,8 +46,8 @@ export default function Pemilik() {
 
     function change(key, value) {
         setSettings(v => {
-            v[key] = value
-            return v
+            v[key] = value;
+            return v;
         });
     }
 
@@ -136,8 +130,17 @@ export default function Pemilik() {
                                         <label htmlFor="gmap">Link Google Maps :</label>
                                         <input id="gmap" defaultValue={settings.linkGoogleMaps} type="text" placeholder="link..." className="input input-primary max-w-lg" onChange={e => change("linkGoogleMaps", e.target.value)} />
                                     </div>
-                                    <div className="form-control gap-2">
+
+                                    <div className="form-control gap-2">                                        
                                         <label htmlFor="file">Image :</label>
+                                        
+                                        <div className={`flex flex-wrap border rounded-lg p-2 gap-2 border-primary ${!settings.images && "hidden"}`}>
+                                            {settings.images && settings.images.split("|").map((v, i) => {
+                                                return (
+                                                    <img key={i} src={v} alt="" className="h-28" />
+                                                );
+                                            })}
+                                        </div>
                                         <input id={`file`} type="file" name="files[]" accept="image/*" multiple className="file-input file-input-bordered w-full max-w-lg" onChange={e => setListFiles(e.target.files)} required />
                                     </div>
                                 </div>
